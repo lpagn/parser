@@ -20,14 +20,29 @@ public class Parser {
 	
 	int S[];
 	int S_last[];
-	
+
+	double avgT = 0;
 	double T[];
+
+	double avgD = 0;
 	double D[];
+
+	double avgS0 = 0;
 	double S0[];
+
+	double avgS1 = 0;
 	double S1[];
+
+	double avgS2 = 0;
 	double S2[];
+
+	double avgS3 = 0;
 	double S3[];
+
+	double avgS4 = 0;
 	double S4[];
+
+	double avgS5 = 0;
 	double S5[];
 	
 	int N;
