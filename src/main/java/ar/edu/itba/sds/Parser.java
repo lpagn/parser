@@ -77,11 +77,13 @@ public class Parser {
 		        int filename = (int)(time/0.1);
 		        String file = "results/" + filename  + ".txt";
 		        //System.out.println(file);
+				//update();//for every array that is used in the Parser class, update does: arr_last = arr;
 		        parse(file);// after parse is called the arrays are set so that calculations can be performed
 		        calculate();
 		        clock += dt2;
 		    }
-		    time += dt;
+
+			time += dt;
 		}
 	}
 	
@@ -92,7 +94,7 @@ public class Parser {
 		the values id , x , y , ... , ... , s
 		*/
 		
-		update();//for every array that is used in the Parser class, update does: arr_last = arr;
+		//update();//for every array that is used in the Parser class, update does: arr_last = arr;
 		
 		String line;
 		try {
@@ -108,14 +110,18 @@ public class Parser {
 	        	for(@SuppressWarnings("unused") String str : arr) {
 	        		//System.out.println(str);
 	        		id = Integer.parseInt(arr[0]);
+	        		presence_last[id] = presence[id];
 	        		presence[id] = true;
 	        		x = Double.parseDouble(arr[1]);
 	        		y = Double.parseDouble(arr[2]);
 	        		state = Integer.parseInt(arr[5]);
 	        	}
 	        	//System.out.println(String.format("%d %.2f %.2f %d",id,x,y,state));
+				X_last[id] = X[id];
 	        	X[id] = x;
+	        	Y_last[id] = Y[id];
 	        	Y[id] = y;
+	        	S_last[id] = S[id];
 	        	S[id] = state;
 	        }
 	    } catch (FileNotFoundException ex) {
@@ -156,23 +162,23 @@ public class Parser {
 		}
 	}
 	
-	public void update() {
-		/*
-		this method updates the last reference and cleans the current reference
-		*/
-		presence_last = presence;
-		id_last = id;
-		X_last = X;
-		Y_last = Y;
-		S_last = S;
-		for(int i = 0 ; i < N + 1; i++) {
-			presence[i]  = false;
-			id[i] = 0;
-			X[i] = 0;
-			Y[i] = 0;
-			S[i] = -1;
-		}
-	}
+//	public void update() {
+//		/*
+//		this method updates the last reference and cleans the current reference
+//		*/
+//		presence_last = presence;
+//		id_last = id;
+//		X_last = X;
+//		Y_last = Y;
+//		S_last = S;
+//		for(int i = 0 ; i < N + 1; i++) {
+//			presence[i]  = false;
+//			id[i] = 0;
+//			X[i] = 0;
+//			Y[i] = 0;
+//			S[i] = -1;
+//		}
+//	}
 	
 	private double distance(double x_last,double x,double y_last,double y) {
 		return Math.sqrt(Math.pow(x_last - x, 2) + Math.pow(y_last - y, 2));
