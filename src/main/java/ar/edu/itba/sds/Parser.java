@@ -40,7 +40,7 @@ public class Parser {
 		this.dt = dt;
 		this.dt2 = dt2;
 		this.simulationTime = simulationTime;
-		N = N + 1; //agent's id are numbered starting by 1
+		N = N + 1; //agent's id are numbered starting by 1, so the first elements of every array will always be 0
 		presence = new boolean[N];
 		presence_last = new boolean[N];
 		
@@ -76,8 +76,6 @@ public class Parser {
 		    if (time > clock) {
 		        int filename = (int)(time/0.1);
 		        String file = "results/" + filename  + ".txt";
-		        //System.out.println(file);
-				//update();//for every array that is used in the Parser class, update does: arr_last = arr;
 		        parse(file);// after parse is called the arrays are set so that calculations can be performed
 		        calculate();
 		        clock += dt2;
@@ -93,22 +91,17 @@ public class Parser {
 		it assigns in ID , X , Y , S (vx and vy are ignored!)
 		the values id , x , y , ... , ... , s
 		*/
-		
-		//update();//for every array that is used in the Parser class, update does: arr_last = arr;
-		
 		String line;
 		try {
 	        @SuppressWarnings("resource")
 			BufferedReader bufferreader = new BufferedReader(new FileReader(filename));
-	        while ((line = bufferreader.readLine()) != null) {   
-	        	//System.out.println(line);
+	        while ((line = bufferreader.readLine()) != null) {
 	        	String[] arr = line.split(" ");
 	        	int id = 0;
 	        	double x = 0;
 	        	double y = 0;
 	        	int state = 0;
 	        	for(@SuppressWarnings("unused") String str : arr) {
-	        		//System.out.println(str);
 	        		id = Integer.parseInt(arr[0]);
 	        		presence_last[id] = presence[id];
 	        		presence[id] = true;
@@ -116,7 +109,6 @@ public class Parser {
 	        		y = Double.parseDouble(arr[2]);
 	        		state = Integer.parseInt(arr[5]);
 	        	}
-	        	//System.out.println(String.format("%d %.2f %.2f %d",id,x,y,state));
 				X_last[id] = X[id];
 	        	X[id] = x;
 	        	Y_last[id] = Y[id];
@@ -161,34 +153,14 @@ public class Parser {
 			}
 		}
 	}
-	
-//	public void update() {
-//		/*
-//		this method updates the last reference and cleans the current reference
-//		*/
-//		presence_last = presence;
-//		id_last = id;
-//		X_last = X;
-//		Y_last = Y;
-//		S_last = S;
-//		for(int i = 0 ; i < N + 1; i++) {
-//			presence[i]  = false;
-//			id[i] = 0;
-//			X[i] = 0;
-//			Y[i] = 0;
-//			S[i] = -1;
-//		}
-//	}
-	
+
 	private double distance(double x_last,double x,double y_last,double y) {
 		return Math.sqrt(Math.pow(x_last - x, 2) + Math.pow(y_last - y, 2));
 	}
 	
 	public String distances() {
 		/*
-		
 		id	Total Distance [m]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Distance [m]").append(" \n");
@@ -200,9 +172,7 @@ public class Parser {
 	
 	public String times() {
 		/*
-		
 		id	Total Time [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time [s]").append(" \n");
@@ -214,9 +184,7 @@ public class Parser {
 	
 	public String timesS0() {
 		/*
-		
 		id	Total Time in State 0 [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 0 [s]").append(" \n");
@@ -228,9 +196,7 @@ public class Parser {
 	
 	public String timesS1() {
 		/*
-		
 		id	Total Time in State 1 [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 1 [s]").append(" \n");
@@ -242,9 +208,7 @@ public class Parser {
 	
 	public String timesS2() {
 		/*
-		
 		id	Total Time in State 2 [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 2 [s]").append(" \n");
@@ -256,9 +220,7 @@ public class Parser {
 	
 	public String timesS3() {
 		/*
-		
 		id	Total Time in State 3 [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 3 [s]").append(" \n");
@@ -270,9 +232,7 @@ public class Parser {
 	
 	public String timesS4() {
 		/*
-		
 		id	Total Time in State 4 [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 4 [s]").append(" \n");
@@ -284,9 +244,7 @@ public class Parser {
 	
 	public String timesS5() {
 		/*
-		
 		id	Total Time in State 5 [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 5 [s]").append(" \n");
@@ -299,9 +257,7 @@ public class Parser {
 
 	public String compare() {
 		/*
-		
 		id Total Time [s]	Total Time in States Sum [s]
-		
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time [s]	").append("Total Time in State Sum [s]").append(" \n");
