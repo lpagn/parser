@@ -25,7 +25,7 @@ public class ReadConf {
 		Properties prop = new Properties();
 		InputStream inputStream = null;
 		try {
-			File initialFile = new File("./implementations/src/main/resources/config.properties");
+			File initialFile = new File("./src/main/resources/config.properties");
 			inputStream = new FileInputStream(initialFile);
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not read file\n");

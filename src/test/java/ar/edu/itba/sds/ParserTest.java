@@ -24,6 +24,8 @@ public class ParserTest {
         System.out.println(parser.timesS0());
 
         System.out.println(parser.timesS1());
+
+        System.out.println(parser.timesS2());
     }
 
 }

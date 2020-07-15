@@ -4,46 +4,48 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Parser {
-	boolean [] presence;
-	boolean [] presence_last;
+	List<Boolean> presence;
+	List<Boolean> presence_last;
 	
-	int [] id;
-	int [] id_last;
+	List<Integer> id;
+	List<Integer> id_last;
 	
-	double[] X;
-	double[] X_last;
+	List<Double> X;
+	List<Double> X_last;
 	
-	double[] Y;
-	double[] Y_last;
+	List<Double> Y;
+	List<Double> Y_last;
 	
-	int[] S;
-	int[] S_last;
+	List<Integer> S;
+	List<Integer> S_last;
 
 	double avgT = 0;
-	double[] T;
+	List<Double> T;
 
 	double avgD = 0;
-	double[] D;
+	List<Double> D;
 
 	double avgS0 = 0;
-	double[] S0;
+	List<Double> S0;
 
 	double avgS1 = 0;
-	double[] S1;
+	List<Double> S1;
 
 	double avgS2 = 0;
-	double[] S2;
+	List<Double> S2;
 
 	double avgS3 = 0;
-	double[] S3;
+	List<Double> S3;
 
 	double avgS4 = 0;
-	double[] S4;
+	List<Double> S4;
 
 	double avgS5 = 0;
-	double[] S5;
+	List<Double> S5;
 
 	int N;
 	double dt;
@@ -56,38 +58,54 @@ public class Parser {
 		this.dt2 = dt2;
 		this.simulationTime = simulationTime;
 		N = N + 1; //agent's id are numbered starting by 1, so the first elements of every array will always be 0
-		presence = new boolean[N];
-		presence_last = new boolean[N];
+		presence = new ArrayList<Boolean>(N);
+		presence_last = new ArrayList<Boolean>(N);
+		id = new ArrayList<Integer>(N);
+		id_last = new ArrayList<Integer>(N);
+		X = new ArrayList<Double>(N);
+		X_last = new ArrayList<Double>(N);
+		Y = new ArrayList<Double>(N);
+		Y_last = new ArrayList<Double>(N);
+		S = new ArrayList<Integer>(N);
+		S_last = new ArrayList<Integer>(N);
+		T =  new ArrayList<Double>(N);
+		D =  new ArrayList<Double>(N);
+		S0 = new ArrayList<Double>(N);
+		S1 = new ArrayList<Double>(N);
+		S2 = new ArrayList<Double>(N);
+		S3 = new ArrayList<Double>(N);
+		S4 = new ArrayList<Double>(N);
+		S5 = new ArrayList<Double>(N);
 		
-		id = new int[N];
-		id_last = new int[N];
-		
-		X = new double[N];
-		X_last = new double[N];
-		
-		Y = new double[N];
-		Y_last = new double[N];
-		
-		S = new int[N];
-		S_last = new int[N];
-		
-		T = new double [N];
-		D = new double [N];
-		S0 = new double[N];
-		S1 = new double[N];
-		S2 = new double[N];
-		S3 = new double[N];
-		S4 = new double[N];
-		S5 = new double[N];
+		for(int i = 0 ; i < N ; i++){
+			presence.add(false);
+			presence_last.add(false);
+			id.add(0);
+			id_last.add(0);
+			X.add(0.0);
+			X_last.add(0.0);
+			Y.add(0.0);
+			Y_last.add(0.0);
+			S.add(0);
+			S_last.add(0);
+			T.add(0.0);
+			D.add(0.0);
+			S0.add(0.0);
+			S1.add(0.0);
+			S2.add(0.0);
+			S3.add(0.0);
+			S4.add(0.0);
+			S5.add(0.0);
+		}
 	}
-	
+
 	public void run() {
 		/*
 		iterate through each file and parse each of them
 		*/
 		double clock = dt2;
 		double time = 0;
-		while(time <= simulationTime){
+		while(time < simulationTime){ // do not look for the last file
 		    if (time > clock) {
 		        int filename = (int)(time/0.1);
 		        String file = "results/" + filename  + ".txt";
@@ -110,6 +128,7 @@ public class Parser {
 		try {
 	        @SuppressWarnings("resource")
 			BufferedReader bufferreader = new BufferedReader(new FileReader(filename));
+	        int counter = 0;
 	        while ((line = bufferreader.readLine()) != null) {
 	        	String[] arr = line.split(" ");
 	        	int id = 0;
@@ -118,18 +137,33 @@ public class Parser {
 	        	int state = 0;
 	        	for(@SuppressWarnings("unused") String str : arr) {
 	        		id = Integer.parseInt(arr[0]);
-	        		presence_last[id] = presence[id];
-	        		presence[id] = true;
+	        		if(id > N){
+	        			presence.add(false);
+	        			presence_last.add(false);
+	        			X.add(0.0);
+	        			X_last.add(0.0);
+	        			Y.add(0.0);
+	        			Y_last.add(0.0);
+	        			S_last.add(0);
+	        			S.add(0);
+	        			T.add(0.0);
+	        			D.add(0.0);
+					}
+					//id = counter;
+	        		System.out.println(filename);
+	        		presence_last.set(id , presence.get(id));
+	        		presence.set(id , true);
 	        		x = Double.parseDouble(arr[1]);
 	        		y = Double.parseDouble(arr[2]);
 	        		state = Integer.parseInt(arr[5]);
 	        	}
-				X_last[id] = X[id];
-	        	X[id] = x;
-	        	Y_last[id] = Y[id];
-	        	Y[id] = y;
-	        	S_last[id] = S[id];
-	        	S[id] = state;
+				X_last.set(id , X.get(id));
+	        	X.set(id,x);
+	        	Y_last.set(id ,  Y.get(id));
+	        	Y.set(id,y);
+	        	S_last.set(id,S.get(id));
+	        	S.set(id,state);
+	        	counter++;
 	        }
 	    } catch (FileNotFoundException ex) {
 	        ex.printStackTrace();
@@ -140,29 +174,29 @@ public class Parser {
 	
 	public void calculate() {
 		for(int id = 0 ; id < N + 1 ; id++){
-			if(presence[id] && presence_last[id]) {
+			if(presence.get(id) && presence_last.get(id)) {
 				//the agent is in both this file and the last one
-				double r = distance(X_last[id],X[id],Y_last[id],Y[id]);
-				D[id] += r;
-				T[id] += dt2;
-				switch(S[id]) {
+				double r = distance(X_last.get(id),X.get(id),Y_last.get(id),Y.get(id));
+				D.set(id,D.get(id) + r);
+				T.set(id,T.get(id) + dt2);
+				switch(S.get(id)) {
 					case 0:
-						S0[id] += dt2;
+						S0.set(id,S0.get(id) + dt2);
 					break;
 					case 1:
-						S1[id] += dt2;
+						S1.set(id,S1.get(id) + dt2);
 					break;
 					case 2:
-						S2[id] += dt2;
+						S2.set(id,S2.get(id) + dt2);
 					break;
 					case 3:
-						S3[id] += dt2;
+						S3.set(id,S3.get(id) + dt2);
 					break;
 					case 4:
-						S4[id] += dt2;
+						S4.set(id,S4.get(id) + dt2);
 					break;
 					case 5:
-						S5[id] += dt2;
+						S5.set(id,S5.get(id) + dt2);
 					break;
 				}
 			}
@@ -180,7 +214,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Distance [m]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(D[i]).append(" \n");
+			ret.append(i).append(" ").append(D.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -192,7 +226,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(T[i]).append(" \n");
+			ret.append(i).append(" ").append(T.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -204,7 +238,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 0 [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(S0[i]).append(" \n");
+			ret.append(i).append(" ").append(S0.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -216,7 +250,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 1 [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(S1[i]).append(" \n");
+			ret.append(i).append(" ").append(S1.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -228,7 +262,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 2 [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(S2[i]).append(" \n");
+			ret.append(i).append(" ").append(S2.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -240,7 +274,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 3 [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(S3[i]).append(" \n");
+			ret.append(i).append(" ").append(S3.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -252,7 +286,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 4 [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(S4[i]).append(" \n");
+			ret.append(i).append(" ").append(S4.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -264,7 +298,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 5 [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(S5[i]).append(" \n");
+			ret.append(i).append(" ").append(S5.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -276,7 +310,7 @@ public class Parser {
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time [s]	").append("Total Time in State Sum [s]").append(" \n");
 		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(T[i]).append("\t").append(S0[i] + S1[i]+ S2[i]+ S3[i] + S4[i] +S5[i]).append(" \n");
+			ret.append(i).append(" ").append(T.get(i)).append("\t").append(S0.get(i) + S1.get(i )+ S2.get(i) + S3.get(i) + S4.get(i) +S5.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
@@ -286,10 +320,10 @@ public class Parser {
 		avgD = average(D);
 	}
 
-	public double average(double[]x) {
+	public double average(List<Double>x) {
 		double sum = 0;
-		for(int i = 0 ; i < x.length ; i++) { // skip the first one and include the last one
-			sum += x[i];
+		for(int i = 0 ; i < x.size() ; i++) { // skip the first one and include the last one
+			sum += x.get(i);
 		}
 		if(N > 1 ){
 			return sum / N;
