@@ -76,7 +76,7 @@ public class Parser {
 		S3 = new ArrayList<Double>(N);
 		S4 = new ArrayList<Double>(N);
 		S5 = new ArrayList<Double>(N);
-		
+
 		for(int i = 0 ; i < N ; i++){
 			presence.add(false);
 			presence_last.add(false);
@@ -128,7 +128,6 @@ public class Parser {
 		try {
 	        @SuppressWarnings("resource")
 			BufferedReader bufferreader = new BufferedReader(new FileReader(filename));
-	        int counter = 0;
 	        while ((line = bufferreader.readLine()) != null) {
 	        	String[] arr = line.split(" ");
 	        	int id = 0;
@@ -137,7 +136,7 @@ public class Parser {
 	        	int state = 0;
 	        	for(@SuppressWarnings("unused") String str : arr) {
 	        		id = Integer.parseInt(arr[0]);
-	        		if(id > N){
+	        		if(id >= presence.size()){
 	        			presence.add(false);
 	        			presence_last.add(false);
 	        			X.add(0.0);
@@ -148,9 +147,14 @@ public class Parser {
 	        			S.add(0);
 	        			T.add(0.0);
 	        			D.add(0.0);
+	        			S0.add(0.0);
+	        			S1.add(0.0);
+						S2.add(0.0);
+						S3.add(0.0);
+						S4.add(0.0);
+						S5.add(0.0);
 					}
-					//id = counter;
-	        		System.out.println(filename);
+	        		//System.out.println(filename);
 	        		presence_last.set(id , presence.get(id));
 	        		presence.set(id , true);
 	        		x = Double.parseDouble(arr[1]);
@@ -163,7 +167,6 @@ public class Parser {
 	        	Y.set(id,y);
 	        	S_last.set(id,S.get(id));
 	        	S.set(id,state);
-	        	counter++;
 	        }
 	    } catch (FileNotFoundException ex) {
 	        ex.printStackTrace();
@@ -173,7 +176,7 @@ public class Parser {
 	}
 	
 	public void calculate() {
-		for(int id = 0 ; id < N + 1 ; id++){
+		for(int id = 0 ; id < presence.size() ; id++){
 			if(presence.get(id) && presence_last.get(id)) {
 				//the agent is in both this file and the last one
 				double r = distance(X_last.get(id),X.get(id),Y_last.get(id),Y.get(id));
@@ -213,7 +216,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Distance [m]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < D.size() ; i++) {
 			ret.append(i).append(" ").append(D.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -225,7 +228,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < T.size() ; i++) {
 			ret.append(i).append(" ").append(T.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -237,7 +240,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 0 [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < S0.size() ; i++) {
 			ret.append(i).append(" ").append(S0.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -249,7 +252,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 1 [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < S1.size() ; i++) {
 			ret.append(i).append(" ").append(S1.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -261,7 +264,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 2 [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < S2.size() ; i++) {
 			ret.append(i).append(" ").append(S2.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -273,7 +276,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 3 [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < S3.size() ; i++) {
 			ret.append(i).append(" ").append(S3.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -285,7 +288,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 4 [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < S4.size() ; i++) {
 			ret.append(i).append(" ").append(S4.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -297,7 +300,7 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time in State 5 [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
+		for(int i = 0 ; i < S5.size() ; i++) {
 			ret.append(i).append(" ").append(S5.get(i)).append(" \n");
 		}
 		return ret.toString();
@@ -309,8 +312,8 @@ public class Parser {
 		*/
 		StringBuilder ret = new StringBuilder();
 		ret.append("ID ").append("Total Time [s]	").append("Total Time in State Sum [s]").append(" \n");
-		for(int i = 0 ; i < N + 1 ; i++) {
-			ret.append(i).append(" ").append(T.get(i)).append("\t").append(S0.get(i) + S1.get(i )+ S2.get(i) + S3.get(i) + S4.get(i) +S5.get(i)).append(" \n");
+		for(int i = 0 ; i < S.size() ; i++) {
+			ret.append(i).append(" ").append(T.get(i)).append("\t").append(S0.get(i) + S1.get(i)+ S2.get(i) + S3.get(i) + S4.get(i) +S5.get(i)).append(" \n");
 		}
 		return ret.toString();
 	}
