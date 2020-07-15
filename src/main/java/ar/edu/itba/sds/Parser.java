@@ -45,8 +45,6 @@ public class Parser {
 	double avgS5 = 0;
 	double[] S5;
 
-	double[] percentages;
-
 	int N;
 	double dt;
 	double dt2;
@@ -271,15 +269,6 @@ public class Parser {
 		return ret.toString();
 	}
 
-	public String percentages(){
-		StringBuilder ret = new StringBuilder();
-		ret.append("State ").append("Porcentual average time per state [s]").append(" \n");
-		for(int i = 0 ; i < 5  ; i++) {
-			ret.append(i).append(" ").append(percentages[i]).append(" \n");
-		}
-		return ret.toString();
-	}
-
 	public String compare() {
 		/*
 		id Total Time [s]	Total Time in States Sum [s]
@@ -297,16 +286,6 @@ public class Parser {
 		avgD = average(D);
 	}
 
-	public void percentage(){
-		percentages = new double[5];
-		percentages[0] = average(S0) / T[0];
-		percentages[1] = average(S1) / T[1];
-		percentages[2] = average(S2) / T[2];
-		percentages[3] = average(S3) / T[3];
-		percentages[4] = average(S4) / T[4];
-//		percentages[5] = average(S5) / T[5];
-	}
-	
 	public double average(double[]x) {
 		double sum = 0;
 		for(int i = 0 ; i < x.length ; i++) { // skip the first one and include the last one

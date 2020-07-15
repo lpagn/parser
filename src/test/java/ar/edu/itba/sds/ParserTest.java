@@ -15,7 +15,6 @@ public class ParserTest {
         parser.calculate();
 
         parser.averages();
-        parser.percentage();
 
         System.out.println(parser.distances());
         System.out.println("Average distance: " + parser.avgD);
@@ -25,8 +24,6 @@ public class ParserTest {
         System.out.println(parser.timesS0());
 
         System.out.println(parser.timesS1());
-
-        System.out.println(parser.percentages());
     }
 
 }
