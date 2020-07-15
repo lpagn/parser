@@ -12,39 +12,41 @@ public class Parser {
 	int [] id;
 	int [] id_last;
 	
-	double X[];
-	double X_last[];
+	double[] X;
+	double[] X_last;
 	
-	double Y[];
-	double Y_last[];
+	double[] Y;
+	double[] Y_last;
 	
-	int S[];
-	int S_last[];
+	int[] S;
+	int[] S_last;
 
 	double avgT = 0;
-	double T[];
+	double[] T;
 
 	double avgD = 0;
-	double D[];
+	double[] D;
 
 	double avgS0 = 0;
-	double S0[];
+	double[] S0;
 
 	double avgS1 = 0;
-	double S1[];
+	double[] S1;
 
 	double avgS2 = 0;
-	double S2[];
+	double[] S2;
 
 	double avgS3 = 0;
-	double S3[];
+	double[] S3;
 
 	double avgS4 = 0;
-	double S4[];
+	double[] S4;
 
 	double avgS5 = 0;
-	double S5[];
-	
+	double[] S5;
+
+	double[] percentages;
+
 	int N;
 	double dt;
 	double dt2;
@@ -268,7 +270,15 @@ public class Parser {
 		}
 		return ret.toString();
 	}
-	
+
+	public String percentages(){
+		StringBuilder ret = new StringBuilder();
+		ret.append("State ").append("Porcentual average time per state [s]").append(" \n");
+		for(int i = 0 ; i < 5  ; i++) {
+			ret.append(i).append(" ").append(percentages[i]).append(" \n");
+		}
+		return ret.toString();
+	}
 
 	public String compare() {
 		/*
@@ -280,6 +290,32 @@ public class Parser {
 			ret.append(i).append(" ").append(T[i]).append("\t").append(S0[i] + S1[i]+ S2[i]+ S3[i] + S4[i] +S5[i]).append(" \n");
 		}
 		return ret.toString();
+	}
+	
+	public void averages() {
+		avgT = average(T);
+		avgD = average(D);
+	}
+
+	public void percentage(){
+		percentages = new double[5];
+		percentages[0] = average(S0) / T[0];
+		percentages[1] = average(S1) / T[1];
+		percentages[2] = average(S2) / T[2];
+		percentages[3] = average(S3) / T[3];
+		percentages[4] = average(S4) / T[4];
+//		percentages[5] = average(S5) / T[5];
+	}
+	
+	public double average(double[]x) {
+		double sum = 0;
+		for(int i = 0 ; i < x.length ; i++) { // skip the first one and include the last one
+			sum += x[i];
+		}
+		if(N > 1 ){
+			return sum / N;
+		};
+		return 0;
 	}
 	
 }

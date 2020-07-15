@@ -5,15 +5,25 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Parser" );
-
-        Parser parser = new Parser(10,0.05,0.5,700);// This parameters should be read from a config file
+        
+        ReadConf reader = ReadConf.getInstance();
+        int N = Integer.parseInt(reader.generatormaxagents);
+        double dt = Double.parseDouble(reader.simulationdt);
+        double dt2 = Double.parseDouble(reader.simulationdt2);
+        double simulationtime = Double.parseDouble(reader.simulationtime);
+        
+        System.out.println(String.format("%s %.2f %.2f %.2f",N,dt,dt2,simulationtime));
+        Parser parser = new Parser(N,dt2,dt,simulationtime);// This parameters should be read from a config file
 
         parser.run();
+        parser.averages();
 
         //TODO: average distance
         System.out.println(parser.distances());
+        System.out.println("Average D: " + parser.avgD);
         //TODO: average time
         System.out.println(parser.times());
+        System.out.println("Average T: " + parser.avgT);
         //TODO: average time in 0
         System.out.println(parser.timesS0());
         //TODO: average time in 1
@@ -28,5 +38,7 @@ public class App
         System.out.println(parser.timesS5());
 
         System.out.println(parser.compare());
+        
+        
     }
 }
